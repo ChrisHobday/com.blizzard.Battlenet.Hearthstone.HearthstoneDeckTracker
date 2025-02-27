@@ -1,0 +1,62 @@
+app-id: com.blizzard.Battle.net.Hearthstone.HearthstoneDeckTracker
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+base: com.blizzard.Battle.net.Hearthstone
+rename-desktop-file: HearthstoneDeckTracker.desktop
+rename-icon: HearthstoneDeckTracker
+command: HearthstoneDeckTracker.sh
+finish-args:
+  - --device=all
+  - --talk-name=org.freedesktop.Flatpak # Required for use of flatpak-spawn to launch the Battle.net / Hearthstone Flatpaks
+  - --filesystem=host:ro
+  - --filesystem=xdg-run/app/com.discordapp.Discord:create # Required for setting up Discord rich presence
+  - --filesystem=xdg-run/gamescope-0:ro # Required for Gamescope on Steam Deck
+  - --filesystem=~/.var/app/com.blizzard.Battle.net:create # Required to use the Battle.net base app's wine directory
+  - --socket=pulseaudio
+  - --socket=x11
+  - --share=network
+  - --share=ipc
+  - --allow=multiarch
+  - --env=WINEPREFIX=~/.var/app/com.blizzard.Battle.net/data/wine # The Wine prefix where Windows files and .exe files are installed (Causes wine errors because wine does not like relative paths. So this is also set in scripts.)
+  # - --env=WINEARCH=win32 # Set 32 bit architecture for Wine prefix
+inherit-extensions:
+  - org.freedesktop.Platform.Compat.i386
+  - org.freedesktop.Platform.GL32
+  - org.freedesktop.Platform.ffmpeg-full
+  - org.freedesktop.Platform.ffmpeg_full.i386
+  - org.winehq.WineStaging.gecko
+  - org.winehq.WineStaging.mono
+  - org.winehq.WineStaging.DLLs
+modules:
+  - name: HearthstoneDeckTracker
+    buildsystem: simple
+    sources:
+      - type: archive
+        url: https://github.com/HearthSim/Hearthstone-Deck-Tracker/releases/download/v1.41.5/Hearthstone.Deck.Tracker-v1.41.5.zip
+        sha256: c50bba71882e6935f4acb447dc93d60692bb490162eb242dc678f5c287546409
+        dest: HearthstoneDeckTracker
+      - type: file
+        path: com.blizzard.Battle.net.Hearthstone.HearthstoneDeckTracker.metainfo.xml
+      - type: file
+        path: Icons/HearthstoneDeckTracker256x256.png
+      - type: file
+        path: Icons/HearthstoneDeckTracker48x48.png
+      - type: file
+        path: Icons/HearthstoneDeckTracker32x32.png
+      - type: file
+        path: Icons/HearthstoneDeckTracker16x16.png
+      - type: file
+        path: DesktopEntries/HearthstoneDeckTracker.desktop
+      - type: file
+        path: Scripts/HearthstoneDeckTracker.sh
+    build-commands:
+      - |
+        mv HearthstoneDeckTracker /app/bin
+        install -Dm644 com.blizzard.Battle.net.Hearthstone.HearthstoneDeckTracker.metainfo.xml -t /app/share/metainfo
+        install -Dm644 HearthstoneDeckTracker256x256.png -T /app/share/icons/hicolor/256x256/apps/HearthstoneDeckTracker.png
+        install -Dm644 HearthstoneDeckTracker48x48.png -T /app/share/icons/hicolor/48x48/apps/HearthstoneDeckTracker.png
+        install -Dm644 HearthstoneDeckTracker32x32.png -T /app/share/icons/hicolor/32x32/apps/HearthstoneDeckTracker.png
+        install -Dm644 HearthstoneDeckTracker16x16.png -T /app/share/icons/hicolor/16x16/apps/HearthstoneDeckTracker.png
+        install -Dm644 HearthstoneDeckTracker.desktop -t /app/share/applications
+        install -Dm744 HearthstoneDeckTracker.sh -t /app/bin
