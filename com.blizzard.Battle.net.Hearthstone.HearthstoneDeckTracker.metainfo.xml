@@ -3,7 +3,7 @@
   <id>com.blizzard.Battle.net.Hearthstone.HearthstoneDeckTracker</id>
   
   <name>Hearthstone Deck Tracker</name>
-  <summary>Hearthstone Deck Tracker(Unofficial)</summary>
+  <summary>Hearthstone Deck Tracker (Unofficial)</summary>
   
   <metadata_license>CC-BY-SA-3.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
@@ -16,7 +16,7 @@
   
   <description>
     <p>
-      Hearthstone Deck Tracker(Unofficial)
+      Hearthstone Deck Tracker (Unofficial)
     </p>
   </description>
 

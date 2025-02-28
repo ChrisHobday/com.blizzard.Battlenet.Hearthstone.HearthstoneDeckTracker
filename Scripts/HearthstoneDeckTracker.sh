@@ -11,14 +11,14 @@ if [ -d "${WINEPREFIX}/drive_c/Program Files (x86)/Battle.net/" ]; then
       ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
   done
 
-  echo "Installing dotnet472 with winetricks"
-  winetricks dotnet472
+  # echo "Installing dotnet472 with winetricks"
+  # winetricks dotnet472
 
-  echo "Installing corefonts with winetricks"
-  winetricks corefonts
+  # echo "Installing corefonts with winetricks"
+  # winetricks corefonts
 
-  echo "Turning off crash dialogs with winetricks"
-  winetricks nocrashdialog
+  # echo "Turning off crash dialogs with winetricks"
+  # winetricks nocrashdialog
 
   # echo "Updating Windows registry with Wine graphics keys"
   # wine regedit /app/share/WineGraphics.reg
