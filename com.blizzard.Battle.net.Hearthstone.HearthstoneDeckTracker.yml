@@ -33,8 +33,8 @@ modules:
     buildsystem: simple
     sources:
       - type: archive
-        url: https://github.com/HearthSim/Hearthstone-Deck-Tracker/releases/download/v1.41.5/Hearthstone.Deck.Tracker-v1.41.5.zip
-        sha256: c50bba71882e6935f4acb447dc93d60692bb490162eb242dc678f5c287546409
+        url: https://github.com/HearthSim/Hearthstone-Deck-Tracker/releases/download/v1.41.6/Hearthstone.Deck.Tracker-v1.41.6.zip
+        sha256: dfb73b7ff8fee7adabec43ecd6e8a75045310d7bd7c572dd376a2d2abd5ae4e7
         dest: HearthstoneDeckTracker
       - type: file
         path: com.blizzard.Battle.net.Hearthstone.HearthstoneDeckTracker.metainfo.xml
