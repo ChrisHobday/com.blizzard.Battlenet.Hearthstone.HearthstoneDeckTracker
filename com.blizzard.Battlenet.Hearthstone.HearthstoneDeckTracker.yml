@@ -1,0 +1,87 @@
+app-id: com.blizzard.Battlenet.Hearthstone.HearthstoneDeckTracker
+# branch: testing                                                   # Set branch for testing purposes (Default branch is master)
+sdk: org.wine.Sdk
+runtime: org.wine.Platform
+runtime-version: '10.8'
+base: com.blizzard.Battlenet.Hearthstone
+# rename-desktop-file: HearthstoneDeckTracker.desktop               # Not needed because desktop file is already named com.blizzard.Battlenet.Hearthstone.HeathstoneDeckTracker
+# rename-icon: HearthstoneDeckTracker                               # Not needed because icons are already named com.blizzard.Battlenet.Hearthstone.HeathstoneDeckTracker
+command: HearthstoneDeckTracker.sh
+finish-args:
+  - --allow=multiarch                                            # Access to 32bit libraries (For running 32bit executables)
+  # - --allow=devel                                                # Uses full SDK as the runtime (Access to more debugging tools and other libs)
+  # - --allow=bluetooth                                            # Access to bluetooth
+  # - --device=all                                                 # Access to all devices
+  - --device=dri                                                 # Access to DRI for OpenGL rendering
+  - --device=input                                               # Access to input devices (Controllers, etc)
+  # - --socket=wayland                                             # Access to Wayland socket for display
+  - --socket=fallback-x11                                        # Access to X11 socket for display (Incase wayland doesn't work)
+  - --socket=pulseaudio                                          # Access to pulse audio socket for sound
+  - --share=network                                              # Access to networking
+  - --share=ipc                                                  # Access to host IPC namespace
+  - --talk-name=org.freedesktop.Flatpak                          # Required for use of flatpak-spawn to launch the Battle.net Flatpak
+  - --talk-name=org.freedesktop.ScreenSaver                      # Can talk to Screensaver (Allows preventing Screensaver)
+  # - --system-talk-name=org.freedesktop.UDisks2                   # Can manage storage devices directly
+  # - --system-talk-name=org.freedesktop.NetworkManager            # Can manage network directly
+  # - --filesystem=host:ro                                         # Read access to common host directories
+  - --filesystem=~/.var/app/com.blizzard.Battlenet:create        # Required to use the Battle.net base app's wine directory
+  - --filesystem=xdg-run/app/com.discordapp.Discord:create       # Read/write access to Discord's running instance (Required for setting up Discord rich presence)
+  - --filesystem=xdg-run/gamescope-0:ro                          # Read access to Gamescope's running instance (Required for Gamescope on Steam Deck)
+  # - --env=WINEARCH=win32                                         # Set Wine to 32bit mode (64bit mode is default)
+  - --env=WINEPREFIX=~/.var/app/com.blizzard.Battlenet/data/wine # The Battle.net Base App's Wine prefix where Windows files and .exe files are installed (Causes wine errors because wine does not like relative paths. So this is also set in scripts.)
+
+inherit-extensions:
+  - org.freedesktop.Platform.Compat.i386       # 32bit Linux compatibility
+  - org.freedesktop.Platform.Compat.i386.Debug # 32bit Linux compatibility debug
+  - org.freedesktop.Platform.GL                # OpenGL
+  - org.freedesktop.Platform.GL32              # 32bit OpenGL
+  - org.freedesktop.Platform.GL32.Debug        # 32bit OpenGL Debug
+  - org.freedesktop.Platform.VAAPI.Intel       # Intel VAAPI
+  - org.freedesktop.Platform.VAAPI.Intel.i386  # 32bit Intel VAAPI
+  - org.freedesktop.Platform.ffmpeg-full       # FFmpeg
+  - org.freedesktop.Platform.ffmpeg_full.i386  # 32bit FFmpeg
+
+modules:
+  - name: HearthstoneDeckTracker
+    buildsystem: simple
+    sources:
+      - type: archive
+        url: https://github.com/HearthSim/Hearthstone-Deck-Tracker/releases/download/v1.44.7/Hearthstone.Deck.Tracker-v1.44.7.zip
+        sha256: 3daf3bea7a42afabb96b893557ea8a7e9fa47c43505ee9511f68cec71a97bb9d
+        dest: HearthstoneDeckTracker
+
+      # Windows registry file that disables hardware acceleration (needed for newer versions of Hearthstone Deck Tracker)
+      - type: file
+        path: Registry/WineGraphics.reg
+
+      - type: file
+        path: Scripts/HearthstoneDeckTracker.sh
+
+      - type: file
+        path: Icons/HearthstoneDeckTracker256x256.png
+
+      - type: file
+        path: Icons/HearthstoneDeckTracker48x48.png
+
+      - type: file
+        path: Icons/HearthstoneDeckTracker32x32.png
+
+      - type: file
+        path: Icons/HearthstoneDeckTracker16x16.png
+
+      - type: file
+        path: DesktopEntries/HearthstoneDeckTracker.desktop
+
+      - type: file
+        path: com.blizzard.Battlenet.Hearthstone.HearthstoneDeckTracker.metainfo.xml
+    build-commands:
+      - |
+        mv HearthstoneDeckTracker /app/bin
+        install -Dm644 WineGraphics.reg -t ${FLATPAK_DEST}/share/                                      # Install Windows registry keys that will be applied to Wine prefix
+        install -Dm744 HearthstoneDeckTracker.sh -t /app/bin
+        # install -Dm644 HearthstoneDeckTracker256x256.png -T /app/share/icons/hicolor/256x256/apps/HearthstoneDeckTracker.png
+        # install -Dm644 HearthstoneDeckTracker48x48.png -T /app/share/icons/hicolor/48x48/apps/HearthstoneDeckTracker.png
+        # install -Dm644 HearthstoneDeckTracker32x32.png -T /app/share/icons/hicolor/32x32/apps/HearthstoneDeckTracker.png
+        # install -Dm644 HearthstoneDeckTracker16x16.png -T /app/share/icons/hicolor/16x16/apps/HearthstoneDeckTracker.png
+        install -Dm644 HearthstoneDeckTracker.desktop -t /app/share/applications
+        install -Dm644 com.blizzard.Battlenet.Hearthstone.HearthstoneDeckTracker.metainfo.xml -t /app/share/metainfo

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>com.blizzard.Battle.net.Hearthstone.HearthstoneDeckTracker</id>
+  <id>com.blizzard.Battlenet.Hearthstone.HearthstoneDeckTracker</id>
   
   <name>Hearthstone Deck Tracker</name>
   <summary>Hearthstone Deck Tracker (Unofficial)</summary>
@@ -21,8 +21,9 @@
   </description>
 
   <releases>
+    <release version="2" date="2025-05-30"/>
     <release version="1" date="2024-12-10"/>
   </releases>
   
-  <launchable type="desktop-id">com.blizzard.Battle.net.Hearthstone.HearthstoneDeckTracker.desktop</launchable>
+  <launchable type="desktop-id">com.blizzard.Battlenet.Hearthstone.HearthstoneDeckTracker.desktop</launchable>
 </component>
