@@ -5,5 +5,5 @@ GenericName=Hearthstone Deck Tracker
 Comment=Hearthstone Deck Tracker (Unofficial)
 Exec=HearthstoneDeckTracker.sh
 Categories=Game;
-Icon=com.blizzard.Battlenet.Hearthstone.HearthstoneDeckTracker
+Icon=com.blizzard.Battlenet.HearthstoneDeckTracker
 Keywords=Hearthstone Deck Tracker;Hearthstone;Blizzard;Battlenet;Battle.net;
