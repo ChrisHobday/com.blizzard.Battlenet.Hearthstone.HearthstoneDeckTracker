@@ -2,7 +2,7 @@ app-id: com.blizzard.Battlenet.HearthstoneDeckTracker
 # branch: testing                                                   # Set branch for testing purposes (Default branch is master)
 sdk: org.wine.Sdk
 runtime: org.wine.Platform
-runtime-version: '10.8'
+runtime-version: '10.10'
 base: com.blizzard.Battlenet                                        # Base this Flatpak on the com.blizzard.Battlenet Flatpak (This Flatpak has access to all files the Base Flatpak has access to)
 # rename-desktop-file: HearthstoneDeckTracker.desktop               # Not needed because desktop file is already named com.blizzard.Battlenet.HeathstoneDeckTracker
 # rename-icon: HearthstoneDeckTracker                               # Not needed because icons are already named com.blizzard.Battlenet.HeathstoneDeckTracker
@@ -24,10 +24,10 @@ finish-args:
   # - --system-talk-name=org.freedesktop.UDisks2                   # Can manage storage devices directly
   # - --system-talk-name=org.freedesktop.NetworkManager            # Can manage network directly
   # - --filesystem=host:ro                                         # Read access to common host directories
-  - --filesystem=~/.var/app/com.blizzard.Battlenet:create        # Required to use the Battle.net Base App's wine directory
   - --filesystem=xdg-run/app/com.discordapp.Discord:create       # Read/write access to Discord's running instance (Required for setting up Discord rich presence)
   # - --filesystem=xdg-run/discord-ipc-0:create                    # Read/Write access to Discord's IPC socket (Required for setting up Discord rich presence)
   - --filesystem=xdg-run/gamescope-0:ro                          # Read access to Gamescope's running instance (Required for Gamescope on Steam Deck)
+  - --filesystem=~/.var/app/com.blizzard.Battlenet:ro            # Required to use the Battle.net Base App's wine directory
   # - --env=WINEARCH=win32                                         # Set Wine to 32bit mode (64bit mode is default)
   - --env=WINEPREFIX=~/.var/app/com.blizzard.Battlenet/data/wine # The Battle.net Base App's Wine prefix where Windows files and .exe files are installed (Causes wine errors because wine does not like relative paths. So this is also set in scripts.)
 inherit-extensions:
@@ -44,12 +44,13 @@ modules:
   - name: HearthstoneDeckTracker
     buildsystem: simple
     sources:
+      # TODO: Add x-checker-data
       # NOTE: These files are downloaded when the user installs this Flatpak, and are not included in the Flatpak when it is built. This is necessary to avoid redistributing copyrighted materials or very large files
       # Hearthstone Deck Tracker installation folder, which contains icon and executable to be ran with Wine (Downloaded to /app/extra when user is installing because of extra-data)
       - type: extra-data
-        url: https://github.com/HearthSim/Hearthstone-Deck-Tracker/releases/download/v1.44.11/Hearthstone.Deck.Tracker-v1.44.11.zip
-        sha256: 828e8c80c778005d8b2de76838523778510c319204b461bdc9f068146b394ebe                                                    # Hash that is used to confirm the correct file was downloaded
-        size: 17122598                                                                                                              # Size of executable (Found with "wc --bytes < filename")
+        url: https://github.com/HearthSim/Hearthstone-Deck-Tracker/releases/download/v1.44.13/Hearthstone.Deck.Tracker-v1.44.13.zip
+        sha256: 66798acb0a678f26a34867b77bf40105ff5264707d8bc0b72361adaf92881c41                                                    # Hash that is used to confirm the correct file was downloaded
+        size: 17153167                                                                                                              # Size of executable (Found with "wc --bytes < filename")
         filename: Hearthstone Deck Tracker.zip
 
       # Script that is automatically ran when user is installing, after extra-data is downloaded
@@ -91,7 +92,6 @@ modules:
         path: com.blizzard.Battlenet.HearthstoneDeckTracker.metainfo.xml
     build-commands:
       - |
-        # ln -s "${FLATPAK_DEST}/extra/Hearthstone Deck Tracker" "${FLATPAK_DEST}/bin/Hearthstone Deck Tracker"       # Symlink to installation folder (Contains executable) that will be downloaded with extra-data when user installs
         install -Dm744 apply_extra -t ${FLATPAK_DEST}/bin/                                                          # Install script that will be ran automatically when user installs, after extra-data sources are downloaded
         install -Dm644 WineGraphics.reg -t ${FLATPAK_DEST}/share/                                                   # Install Windows registry keys that will be applied to Wine prefix
         install -Dm744 HearthstoneDeckTracker.sh -t ${FLATPAK_DEST}/bin                                             # Install script that will act as the launch command when the Flatpak starts
