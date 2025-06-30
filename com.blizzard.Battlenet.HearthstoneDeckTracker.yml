@@ -1,7 +1,7 @@
 app-id: com.blizzard.Battlenet.HearthstoneDeckTracker
 # branch: testing                                                   # Set branch for testing purposes (Default branch is master)
-sdk: org.wine.Sdk
-runtime: org.wine.Platform
+sdk: org.winestaging.Sdk
+runtime: org.winestaging.Platform
 runtime-version: '10.10'
 base: com.blizzard.Battlenet                                        # Base this Flatpak on the com.blizzard.Battlenet Flatpak (This Flatpak has access to all files the Base Flatpak has access to)
 # rename-desktop-file: HearthstoneDeckTracker.desktop               # Not needed because desktop file is already named com.blizzard.Battlenet.HeathstoneDeckTracker
@@ -27,7 +27,7 @@ finish-args:
   - --filesystem=xdg-run/app/com.discordapp.Discord:create       # Read/write access to Discord's running instance (Required for setting up Discord rich presence)
   # - --filesystem=xdg-run/discord-ipc-0:create                    # Read/Write access to Discord's IPC socket (Required for setting up Discord rich presence)
   - --filesystem=xdg-run/gamescope-0:ro                          # Read access to Gamescope's running instance (Required for Gamescope on Steam Deck)
-  - --filesystem=~/.var/app/com.blizzard.Battlenet:ro            # Required to use the Battle.net Base App's wine directory
+  - --filesystem=~/.var/app/com.blizzard.Battlenet:create        # Required to use the Battle.net Base App's wine directory
   # - --env=WINEARCH=win32                                         # Set Wine to 32bit mode (64bit mode is default)
   - --env=WINEPREFIX=~/.var/app/com.blizzard.Battlenet/data/wine # The Battle.net Base App's Wine prefix where Windows files and .exe files are installed (Causes wine errors because wine does not like relative paths. So this is also set in scripts.)
 inherit-extensions:
